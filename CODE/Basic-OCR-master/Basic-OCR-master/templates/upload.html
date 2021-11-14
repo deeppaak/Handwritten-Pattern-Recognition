@@ -1,0 +1,44 @@
+{% extends "navbar.html" %}
+{% block content %}
+
+
+  {% if msg %}
+  <h1>{{ msg }}</h1>
+  {% endif %}
+
+  <h1 class="text-2xl">Upload new File</h1>
+
+  <form method=post enctype=multipart/form-data>
+    <input class="bg-green-300 py-2 px-5 my-5 rounded" class="my-12 w-auto" type=file name=file required accept="image/*">
+      <button class="bg-blue-300 py-2 my-5 px-5 rounded"> Submit</button>
+
+  </form>
+
+  <h1>Result will be displayed here:</h1>
+  {% if img_src %}
+  <img style="max-width: 400px;max-height:300px" src="{{ img_src }}">
+  {% endif %}
+
+  {% if extracted_text %}
+  <p> The extracted text from the image above is: <b id="extracted-text"> {{ extracted_text }} </b></p>
+  <button class="bg-blue-300 py-2 px-5 rounded"  onclick="speak()">Speak</button>
+
+
+  {% elif extracted_text=="" %}
+<p>No text found.</p>
+  {% endif %}
+  <script>
+
+  async  function speak(){
+      const text = document.querySelector('#extracted-text').innerHTML
+      console.log(text);
+      var utterThis = new SpeechSynthesisUtterance(text.replace(/[^a-zA-Z0-9 ]/g,' '));
+      utterThis.volume = 1;
+      utterThis.lang='en-GB'
+      utterThis.voice = speechSynthesis.getVoices()[65]
+      speechSynthesis.speak(utterThis)
+      console.log(utterThis);
+    }
+
+  </script>
+  {% endblock %}
